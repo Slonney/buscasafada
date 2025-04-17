@@ -1,32 +1,99 @@
 <!DOCTYPE html><html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Busca Safada</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
-    <style>
-      :root {
-        --bg-dark: linear-gradient(to right, #1f0036, #3a0066);
-        --bg-light: linear-gradient(to right, #f4e1f5, #ffe6f7);
-        --text-dark: #fff;
-        --text-light: #111;
-        --accent: #ff69b4;
-        --card-bg-dark: rgba(255, 255, 255, 0.05);
-        --card-bg-light: rgba(255, 255, 255, 0.8);
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Busca Safada</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+  <style>
+    :root {
+      --bg-dark: linear-gradient(to right, #1f0036, #3a0066);
+      --text-dark: #fff;
+      --accent: #ff69b4;
+      --card-bg-dark: rgba(255, 255, 255, 0.05);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-dark);
+      padding: 1.5rem;
+    }
+    h1 {
+      color: var(--accent);
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .container {
+      max-width: 480px;
+      margin: auto;
+    }
+    .search-box, select, button {
+      width: 100%;
+      padding: 0.8rem;
+      margin: 0.5rem 0;
+      border-radius: 10px;
+      border: none;
+      font-size: 1rem;
+    }
+    .suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .suggestions button {
+      background: var(--card-bg-dark);
+      border: none;
+      color: var(--text-dark);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Painel de Busca Safada</h1>
+    <p>Escolha o site, digite sua busca e se joga no prazer:</p><input type="text" id="searchInput" class="search-box" placeholder="Digite sua busca...">
+
+<select id="siteSelect">
+  <option value="xvideos">XVideos</option>
+  <option value="pornhub">Pornhub</option>
+  <option value="redtube">RedTube</option>
+  <option value="eporner">Eporner</option>
+</select>
+
+<button onclick="search()">Buscar Agora</button>
+
+<div class="suggestions">
+  <button onclick="setSearch('oral')">oral</button>
+  <button onclick="setSearch('boquete')">boquete</button>
+  <button onclick="setSearch('anal')">anal</button>
+  <button onclick="setSearch('creampie')">creampie</button>
+</div>
+
+  </div>  <script>
+    function setSearch(term) {
+      document.getElementById('searchInput').value = term;
+    }
+
+    function search() {
+      const query = document.getElementById('searchInput').value.trim();
+      const site = document.getElementById('siteSelect').value;
+
+      if (!query) return alert('Digite algo safado primeiro...');
+
+      let url = '';
+      switch(site) {
+        case 'xvideos': url = `https://www.xvideos.com/?k=${query}`; break;
+        case 'pornhub': url = `https://www.pornhub.com/video/search?search=${query}`; break;
+        case 'redtube': url = `https://www.redtube.com/?search=${query}`; break;
+        case 'eporner': url = `https://www.eporner.com/search/${query}/`; break;
       }
-      * {
-        box-sizing: border-box;
-      }
-      body {
-        margin: 0;
-        font-family: 'Roboto', sans-serif;
-        background: var(--bg-dark);
-        color: var(--text-dark);
-        transition: all 0.3s ease;
-        padding: 1rem;
-      }
-      /* Resto do CSS e HTML será mantido aqui normalmente */
-    </style>
-  </head>
-  <body>
-    <!-- conteúdo continua daqui -->
+      window.open(url, '_blank');
+    }
+  </script></body>
+</html>
