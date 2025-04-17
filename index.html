@@ -1,142 +1,189 @@
-<!DOCTYPE html><html lang="pt-BR">
-<head>
+<!DOCTYPE html><html lang="pt-BR"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Painel de Busca Safada</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --bg-dark: linear-gradient(to right, #1f0036, #3a0066);
-      --bg-light: linear-gradient(to right, #fff1fb, #ffe6f7);
+      --bg-dark: linear-gradient(to right, #1a1a1a, #2c003e);
+      --bg-light: linear-gradient(to right, #fefefe, #ffe4f0);
       --text-dark: #fff;
       --text-light: #111;
       --accent: #ff69b4;
       --card-bg-dark: rgba(255, 255, 255, 0.05);
-      --card-bg-light: rgba(0, 0, 0, 0.05);
+      --card-bg-light: rgba(255, 255, 255, 0.95);
     }
     * {
       box-sizing: border-box;
     }
     body {
       margin: 0;
-      font-family: 'Roboto', sans-serif;
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
       background: var(--bg-dark);
       color: var(--text-dark);
-      padding: 2rem 1rem;
-      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.5s, color 0.5s;
+      padding: 20px;
+    }
+    body.light {
+      background: var(--bg-light);
+      color: var(--text-light);
     }
     .container {
+      background: var(--card-bg-dark);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 24px;
+      box-shadow: 0 0 30px rgba(255, 105, 180, 0.2);
       max-width: 500px;
-      margin: auto;
+      width: 100%;
+      transition: background 0.5s;
+    }
+    body.light .container {
+      background: var(--card-bg-light);
+    }
+    .toggle-mode {
+      background: none;
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      float: right;
+      margin-bottom: 10px;
     }
     h1 {
-      text-align: center;
-      font-size: 2rem;
       color: var(--accent);
-      margin-bottom: 0.5rem;
+      margin-bottom: 10px;
+      clear: both;
     }
     p {
-      text-align: center;
-      margin-bottom: 1.5rem;
+      font-size: 16px;
+      opacity: 0.9;
     }
     input, select, button {
       width: 100%;
-      padding: 0.8rem;
-      margin: 0.4rem 0;
-      font-size: 1rem;
+      padding: 12px;
+      margin: 10px 0;
       border-radius: 12px;
       border: none;
+      outline: none;
+      font-size: 16px;
+    }
+    input, select {
+      background: rgba(255,255,255,0.1);
+      color: inherit;
+    }
+    button.submit {
+      background: var(--accent);
+      color: white;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    button.submit:hover {
+      background: #e91e63;
     }
     .suggestions {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem;
+      gap: 8px;
+      margin-top: 20px;
       justify-content: center;
-      margin-top: 1rem;
     }
     .suggestions button {
-      background: var(--card-bg-dark);
-      color: var(--text-dark);
+      font-size: 13px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      background: #333;
       border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      cursor: pointer;
+      color: var(--accent);
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 5px;
+      transition: background 0.3s;
+      flex-shrink: 0;
     }
-    .theme-toggle {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      background: transparent;
-      border: 2px solid var(--accent);
-      color: var(--accent);
-      border-radius: 20px;
-      padding: 0.2rem 0.8rem;
-      font-size: 0.9rem;
-      cursor: pointer;
+    .suggestions button:hover {
+      background: var(--accent);
+      color: white;
+    }
+    body.light .suggestions button {
+      background: #eee;
     }
   </style>
 </head>
 <body>
-  <button class="theme-toggle" onclick="toggleTheme()">
-    <i class="fas fa-moon"></i> Tema Claro
-  </button>
   <div class="container">
+    <div style="text-align: right;">
+      <button class="toggle-mode" onclick="toggleMode()">
+        <i id="theme-icon" class="fas fa-moon"></i>
+        <span id="theme-label">Tema Claro</span>
+      </button>
+    </div>
     <h1>Painel de Busca Safada</h1>
     <p>Escolha o site, digite sua busca e se joga no prazer:</p>
-    <input type="text" id="searchInput" placeholder="Digite sua busca...">
-    <select id="siteSelect">
+    <input type="text" id="pesquisa" placeholder="Digite sua busca...">
+    <select id="site">
       <option value="xvideos">XVideos</option>
       <option value="pornhub">Pornhub</option>
       <option value="redtube">RedTube</option>
       <option value="eporner">Eporner</option>
     </select>
-    <button onclick="search()">Buscar Agora</button>
+    <button class="submit" onclick="buscar()">Buscar Agora</button>
     <div class="suggestions">
-      <button onclick="setSearch('oral')"><i class="fas fa-head-side-cough"></i> oral</button>
-      <button onclick="setSearch('boquete')"><i class="fas fa-hat-wizard"></i> boquete</button>
-      <button onclick="setSearch('anal')"><i class="fas fa-circle"></i> anal</button>
-      <button onclick="setSearch('creampie')"><i class="fas fa-tint"></i> creampie</button>
+      <button onclick="preencher('oral')"><i class="fas fa-kiss-wink-heart"></i>oral</button>
+      <button onclick="preencher('boquete')"><i class="fas fa-head-side-cough"></i>boquete</button>
+      <button onclick="preencher('anal')"><i class="fas fa-circle-dot"></i>anal</button>
+      <button onclick="preencher('creampie')"><i class="fas fa-droplet"></i>creampie</button>
     </div>
-  </div>  <script>
-  function preencher(texto) {
-    const input = document.getElementById('pesquisa');
-    input.focus();
-    input.value = texto;
+    <p style="text-align:center; font-size:12px; opacity:0.5; margin-top:30px;">
+      &copy; 2025 Painel de Busca Safada — Desenvolvido por <strong>Slonney/Marcelo</strong>. Este site atua apenas como redirecionador de conteúdo para plataformas legalizadas e não hospeda nenhum material próprio. Todos os direitos reservados.
+    </p>
+  </div>
+  <script>
+    function preencher(texto) {
+      const input = document.getElementById('pesquisa');
+      input.focus();
+      input.value = texto;
+    }function buscar() {
+  const termoOriginal = document.getElementById('pesquisa').value.trim();
+  const site = document.getElementById('site').value;
+  if (!termoOriginal) {
+    alert('Digite algo, safado.');
+    return;
   }
+  const encoded = encodeURIComponent(termoOriginal);
+  let url = '';
+  switch(site) {
+    case 'xvideos': url = `https://www.xvideos.com/?k=${encoded}`; break;
+    case 'pornhub': url = `https://www.pornhub.com/video/search?search=${encoded}`; break;
+    case 'redtube': url = `https://www.redtube.com/?search=${encoded}`; break;
+    case 'eporner': url = `https://www.eporner.com/search/${encoded}/`; break;
+  }
+  window.open(url, '_blank');
+}
 
-  function buscar() {
-    const termoOriginal = document.getElementById('pesquisa').value.trim();
-    const site = document.getElementById('site').value;
-    if (!termoOriginal) {
-      alert('Digite algo, safado.');
-      return;
-    }
-    const encoded = encodeURIComponent(termoOriginal);
-    let url = '';
-    switch(site) {
-      case 'xvideos': url = `https://www.xvideos.com/?k=${encoded}`; break;
-      case 'pornhub': url = `https://www.pornhub.com/video/search?search=${encoded}`; break;
-      case 'redtube': url = `https://www.redtube.com/?search=${encoded}`; break;
-      case 'eporner': url = `https://www.eporner.com/search/${encoded}/`; break;
-    }
-    window.open(url, '_blank');
+function toggleMode() {
+  document.body.classList.toggle('light');
+  const icon = document.getElementById("theme-icon");
+  const label = document.getElementById("theme-label");
+  if (document.body.classList.contains("light")) {
+    icon.classList.replace("fa-moon", "fa-sun");
+    label.textContent = "Tema Escuro";
+  } else {
+    icon.classList.replace("fa-sun", "fa-moon");
+    label.textContent = "Tema Claro";
   }
+}
 
-  function toggleMode() {
-    document.body.classList.toggle('light');
-    const icon = document.getElementById("theme-icon");
-    const label = document.getElementById("theme-label");
-    if (document.body.classList.contains("light")) {
-      icon.classList.replace("fa-moon", "fa-sun");
-      label.textContent = "Tema Escuro";
-    } else {
-      icon.classList.replace("fa-sun", "fa-moon");
-      label.textContent = "Tema Claro";
-    }
-  }
-</script></body>
+  </script>
+</body>
 </html>
